@@ -96,15 +96,17 @@ public:
 	void			SendShopSell(Packet& packet);
 	// AutoAttck
 	void			SendToggleAutoAttack(bool val);
+	// Free pvp zone
+	void			SendFreePVPZoneEntered();
+	void			SendFreePVPZoneLeft();
 	//Skills
 	void			HandleUseSkill(Packet& packet);
 	void			LearnSkill(TBLIDX id);
 	void			UpgradeSkill(Packet& packet);
 	void			ResetSkill(Packet& packet);
+	//Budokay
 	//buffs
 	void			BuffDrop(Packet& packet);
-	//Budokay
-
 	//Events
 	void			SendDragonBallsCheck(Packet& packet);
 	void			SendShenlongReward(Packet& packet);

@@ -148,6 +148,12 @@ void MySQLConnWrapper::AddMail(CHARACTERID CharID, int byDay, int byMailType, in
 	if (result != NULL)
 		delete result;
 }
+void MySQLConnWrapper::DelMail(MAILID mailID)
+{
+	sql::ResultSet* result = sDB.executes("DELETE FROM `mail` WHERE `id` = '%d';", mailID);
+	if (result != NULL)
+		delete result;
+}
 void MySQLConnWrapper::AddTitle(CHARACTERID characterID, TBLIDX TitleID)
 {
 	sql::ResultSet* result = sDB.executes("INSERT INTO titlelist (`CharacterID`,  `TitleID`) VALUES('%d','%d');",
@@ -159,6 +165,21 @@ void MySQLConnWrapper::SaveQuickTeleport(CHARACTERID characterID, BYTE TeleportI
 {
 	sql::ResultSet* result = sDB.executes("INSERT INTO QuickTeleporter (`CharacterID`, `TeleportID`, `WorldID`, `Loc_x`, `Loc_y`, `Loc_z`, `Year`, `Moch`, `Day`, `Hour`, `Minute`, `Secound`, `MapTblidx` ) VALUES('%d','%d','%d','%f','%f','%f','%d','%d','%d','%d','%d','%d','%d');",
 		characterID, TeleportID, WorldID, Loc_x, Loc_y, Loc_z, Year, Moch, Day, Hour, Minute, Secound, MapTBLIDX);
+	if (result != NULL)
+		delete result;
+}
+
+void MySQLConnWrapper::SavePlayerZenny(int zenny, CHARACTERID charid)
+{
+	sql::ResultSet * result = sDB.executes("UPDATE characters SET ZennyInventory = %d WHERE CharacterID = %d", zenny, charid);
+
+	if (result != NULL)
+		delete result;
+}
+void MySQLConnWrapper::SavePlayerExp(int exp, CHARACTERID charid)
+{
+	sql::ResultSet * result = sDB.executes("UPDATE characters SET CurrentExp = %d WHERE CharacterID = %d", exp, charid);
+
 	if (result != NULL)
 		delete result;
 }

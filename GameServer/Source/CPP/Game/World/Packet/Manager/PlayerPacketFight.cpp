@@ -39,6 +39,28 @@ void WorldSession::SendTargetSelection(HOBJECT hTarget)
 	res.hSubject = hTarget;
 	SendPacket((char*)&res, sizeof(sGU_CHAR_TARGET_CHANGED));
 }
+
+void WorldSession::SendFreePVPZoneEntered()
+{
+	sGU_WORLD_FREE_PVP_ZONE_ENTERED_NFY res;
+	res.wOpCode = GU_WORLD_FREE_PVP_ZONE_ENTERED_NFY;
+	res.handle = _player->GetHandle();
+	res.wPacketSize = sizeof(sGU_WORLD_FREE_PVP_ZONE_ENTERED_NFY) - 2;
+
+	sWorld.SendToAll((char*)&res, sizeof(sGU_WORLD_FREE_PVP_ZONE_ENTERED_NFY));
+	//	sLog.outError("Player: x: %f, y: %f, z: %f", m_position.x, m_position.y, m_position.z);
+}
+
+void WorldSession::SendFreePVPZoneLeft()
+{
+	sGU_WORLD_FREE_PVP_ZONE_LEFT_NFY res;
+	res.wOpCode = GU_WORLD_FREE_PVP_ZONE_LEFT_NFY;
+	res.handle = _player->GetHandle();
+	res.wPacketSize = sizeof(sGU_WORLD_FREE_PVP_ZONE_LEFT_NFY) - 2;
+
+	sWorld.SendToAll((char*)&res, sizeof(sGU_WORLD_FREE_PVP_ZONE_LEFT_NFY));
+}
+
 //----------------------------------------
 // Necesito eliminar toda esa mierda y remake
 // Interpreta la habilidad actual que nuestro jugador quiere lanzar.
@@ -334,18 +356,19 @@ void WorldSession::HandleUseSkill(Packet& packet)
 				if (CriticRate >= 0 && CriticRate <= 60)
 				{
 					AttackType[Demagecount] = eBATTLE_ATTACK_RESULT::BATTLE_ATTACK_RESULT_HIT;
+					DemageValue[Demagecount] *= 20;
 				}
 				if (CriticRate >= 61 && CriticRate <= 80)
 				{
 					AttackType[Demagecount] = eBATTLE_ATTACK_RESULT::BATTLE_ATTACK_RESULT_CRITICAL_HIT;
-					DemageValue[Demagecount] *= 2;
+					DemageValue[Demagecount] *= 40;
 				}
 				if (CriticRate >= 81 && CriticRate <= 100)
 				{
 					AttackType[Demagecount] = eBATTLE_ATTACK_RESULT::BATTLE_ATTACK_RESULT_DODGE;
 					DemageValue[Demagecount] = 0;
 				}
-				if (DemageValue[Demagecount] < 0 || DemageValue[Demagecount] > 1000000000)
+				if (DemageValue[Demagecount] < 500 || DemageValue[Demagecount] > 9000000000)
 				{
 					DemageValue[Demagecount] = skillDataOriginal->SkillValue[0];
 				}
